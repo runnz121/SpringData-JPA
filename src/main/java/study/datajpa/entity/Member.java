@@ -10,6 +10,8 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id","username","age"}) //실행시 출력 연관관계 없는것들 선택
+@NamedQuery(name = "Member.findByUsername",
+            query ="select m from Member m where m.username =:username") //엔티티에 쿼리를 적어서 정의  // '=:' 뜻은 이미 정의된 username의 객체나 값의 조건에 따라 sql문 적용하야 비교하는것  https://developer.salesforce.com/forums/?id=9060G000000I7VAQA0
 public class Member {
 
         @Id
@@ -32,6 +34,13 @@ public class Member {
         public Member(String username) {
             this.username = username;
         }
+
+
+        public Member(String username, int age) {
+                this.username = username;
+                this.age = age;
+        }
+
 
         public Member(String username, int age, Team team) {
                 this.username = username;

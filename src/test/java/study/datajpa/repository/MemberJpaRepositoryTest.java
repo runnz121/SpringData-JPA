@@ -54,11 +54,13 @@ class MemberJpaRepositoryTest {
         List<Member> all = memberJpaRepository.findAll();
         assertThat(all.size()).isEqualTo(2);
 
+
+
         //카운트 검증
         long count = memberJpaRepository.count();
         assertThat(count).isEqualTo(2);
 
-        //삭제 검증
+        //삭제 검증e
         memberJpaRepository.delete(member1);
         memberJpaRepository.delete(member2);
 
@@ -66,9 +68,22 @@ class MemberJpaRepositoryTest {
         assertThat(deletedCount).isEqualTo(0);
 
 
+    }
+
+    @Test
+    public void testNamedQuery(){
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("AAA", 20);
+        memberJpaRepository.save(m1);
+        memberJpaRepository.save(m2);
+
+        List<Member> result = memberJpaRepository.findByUsername("AAA"); //인터페이스 구현만 해놓은
+        Member findMember = result.get(0);
+        assertThat(findMember).isEqualTo(m1);
 
 
     }
+
 
 
 }

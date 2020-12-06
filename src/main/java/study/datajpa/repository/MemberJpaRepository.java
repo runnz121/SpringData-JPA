@@ -21,13 +21,9 @@ public class MemberJpaRepository {
     }
 
 
-
-
-
     public void delete(Member member) { //데이터 삭제
         em.remove(member);
     }
-
 
 
     public List<Member> findAll() { //객체를 대상(JPQL)
@@ -40,15 +36,32 @@ public class MemberJpaRepository {
         return Optional.ofNullable(member);
     }
 
-    public long count(){
-        return em.createQuery("select count(m) from Member m" , Long.class)
+    public long count() {
+        return em.createQuery("select count(m) from Member m", Long.class)
                 .getSingleResult(); //결과를 하나만 반환(단건조회)
     }
-
-
 
 
     public Member find(Long id) { //find를 통해 해당 id를 가져온다
         return em.find(Member.class, id);
     }
+
+    public List<Member> findByUserNameANdAgeGreaterThen(String username, int age) {
+        return em.createQuery("select m from Member m where m.username = :username and m.age > :age")
+                .setParameter("username", username)
+                .setParameter("age", age)
+                .getResultList();
+    }
+
+    public List<Member> findByUsername(String username) {
+        return em.createNamedQuery("Member.findByUsername", Member.class)
+                .setParameter("username", username)
+                .getResultList();
+
+
+    }
+
+
+
 }
+
