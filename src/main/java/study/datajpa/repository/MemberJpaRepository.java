@@ -1,5 +1,6 @@
 package study.datajpa.repository;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import study.datajpa.entity.Member;
 
@@ -47,7 +48,7 @@ public class MemberJpaRepository {
     }
 
     public List<Member> findByUserNameANdAgeGreaterThen(String username, int age) {
-        return em.createQuery("select m from Member m where m.username = :username and m.age > :age")
+        return em.createQuery("select m from Member m where m.username =:username and m.age > :age")
                 .setParameter("username", username)
                 .setParameter("age", age)
                 .getResultList();
@@ -58,6 +59,28 @@ public class MemberJpaRepository {
                 .setParameter("username", username)
                 .getResultList();
 
+
+    }
+
+    public List<Member> findByPage(int age, int offset, int limit) { //page 조회
+        return em.createQuery("select m from Member m where m.age =:age order by m.username desc")
+                .setParameter("age", age) //전달할 변수
+                .setFirstResult(offset) //어디서 시작해서 가져올건지
+                .setMaxResults(limit) //몇개를 가져올건지
+                .getResultList();
+    }
+
+    public long totalCount(int age){ //total count가져오기
+        return em.createQuery("select count(m) from Member m where m.age =:age", Long.class)
+                .setParameter("age", age)
+                .getSingleResult();
+    }
+
+    public int bulkAgePlus(int age){ //벌크 업데이트
+        int resultCount = em.createQuery("update Member m set m.age = m.age + 1 where m.age >= :age")
+                        .setParameter("age",age)
+                        .executeUpdate();
+        return resultCount; //인라인 ctirl + alt + n
 
     }
 
